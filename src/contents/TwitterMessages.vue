@@ -31,7 +31,6 @@ async function render({createRootContainer}) {
 
 async function getRootContainer() {
   const [$html] = document.getElementsByTagName('html')
-  console.log($html, 'html')
 
   if (!$html) return null
 

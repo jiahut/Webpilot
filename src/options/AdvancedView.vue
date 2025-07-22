@@ -193,7 +193,6 @@ import WebpilotButton from '@/components/WebpilotButton.vue'
 import ShortcutInput from '@/components/ShortcutInput.vue'
 
 import {$gettext} from '@/utils/i18n'
-import {WEBPILOT_OPENAI} from '@/config'
 
 import SwitchButton from './components/SwitchButton.vue'
 
@@ -308,8 +307,8 @@ const save = async () => {
     apiOrigin: selectedOption.value,
   })
 
-  const authKey = selectedOption.value === 'general' ? WEBPILOT_OPENAI.AUTH_KEY : saveAuthKey.value
-  const url = selectedOption.value === 'general' ? WEBPILOT_OPENAI.HOST_URL : selfHostUrl.value
+  const authKey = saveAuthKey.value
+  const url = selfHostUrl.value
 
   // Check Toekn validation
   try {

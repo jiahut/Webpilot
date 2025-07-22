@@ -2,22 +2,6 @@
   <div :class="$style['credit-radio-group']">
     <div :class="$style['radio-wrap']">
       <input
-        id="webpilot"
-        v-model="picked"
-        :class="$style['input-radio']"
-        type="radio"
-        :value="CREDIT_SOURCES.WEBPILOT"
-        @change="onChange"
-      />
-      <label
-        :class="picked !== CREDIT_SOURCES.WEBPILOT || $style['radio-activated']"
-        for="webpilot"
-      >
-        Webpilot Credit
-      </label>
-    </div>
-    <div :class="$style['radio-wrap']">
-      <input
         id="openai"
         v-model="picked"
         :class="$style['input-radio']"
@@ -43,7 +27,7 @@ const CREDIT_SOURCES = {
 const props = defineProps({
   modelValue: {
     type: String,
-    default: 'webpilot',
+    default: 'openAI',
   },
 })
 

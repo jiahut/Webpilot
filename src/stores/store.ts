@@ -2,7 +2,7 @@ import {ref} from 'vue'
 import {defineStore} from 'pinia'
 import {Storage} from '@plasmohq/storage'
 
-import {WEBPILOT_CONFIG_STORAGE_KEY, defaultConfig, WEBPILOT_OPENAI} from '@/config'
+import {WEBPILOT_CONFIG_STORAGE_KEY, defaultConfig} from '@/config'
 
 const useStore = defineStore('store', () => {
   const storage = new Storage()
@@ -23,9 +23,6 @@ const useStore = defineStore('store', () => {
       // For old users who have saved some old data, perform some data correction
       if (config.value.apiOrigin === undefined) {
         config.value.apiOrigin = 'personal'
-      }
-      if (config.value.selfHostUrl === WEBPILOT_OPENAI.HOST_URL) {
-        config.value.selfHostUrl = ''
       }
       if (
         !config.value.latestAskedQuestionPromptIndex &&

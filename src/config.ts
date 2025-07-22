@@ -13,13 +13,13 @@ export const defaultConfig = {
    * general: use webpilot
    * personal: use openai or third party
    * */
-  apiOrigin: 'general',
+  apiOrigin: 'openAI',
   /** Open AI or selfhost api key */
   authKey: '',
   /** Is auth succeeded */
-  isAuth: false,
+  isAuth: true,
   /** If user not set token at welcome page set false */
-  isFinishSetup: false,
+  isFinishSetup: true,
   /** When select text (by mouse or keyboard) show popup */
   autoPopup: false,
   /** Self host url */
@@ -84,7 +84,7 @@ export const defaultConfig = {
   ],
   /* Model type, for now use open ai template */
   model: {
-    model: 'gpt-4o-mini',
+    model: 'gpt-4o',
     temperature: 1,
     top_p: 0.9,
     frequency_penalty: 0,
@@ -106,7 +106,7 @@ export const SUPER_BUTTON_STATUS = {
 export const WEBPILOT_OPENAI = {
   AUTH_KEY: 'KEY_PLACEHOLDER',
   HOST_URL: 'https://api.webpilotai.com/api/webpilot',
-  MODEL: 'gpt-4o-mini',
+  MODEL: 'gpt-4o',
 }
 
 export const LAST_PROMPT_STORAGE_KEY = {

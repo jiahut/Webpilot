@@ -44,7 +44,7 @@ import webpilot from 'data-url:./icon/webpilot.svg'
 import webpilotHover from 'data-url:./icon/webpilotHover.svg'
 import webpilotActive from 'data-url:./icon/webpilotActive.svg'
 
-import generating from 'data-url:./icon/generating.svg'
+import generatingIcon from 'data-url:./icon/generating.svg'
 import generatingHover from 'data-url:./icon/generatingHover.svg'
 import generatingActive from 'data-url:./icon/generatingActive.svg'
 
@@ -64,7 +64,7 @@ const SUPER_BUTTON_ICON = {
     pressed: webpilotActive,
   },
   [SUPER_BUTTON_STATUS.generating]: {
-    default: generating,
+    default: generatingIcon,
     hovered: generatingHover,
     pressed: generatingActive,
   },
@@ -211,16 +211,16 @@ function toggleClickEdit() {
 
 .undoButton {
   .superButtonIcon {
-    background-image: url('data-base64:~src/components/SuperButton/icon/undo.svg');
+    background-image: url('data-base64:@/components/SuperButton/icon/undo.svg');
     background-repeat: no-repeat;
   }
 
   &:hover .superButtonIcon {
-    background-image: url('data-base64:~src/components/SuperButton/icon/undoHover.svg');
+    background-image: url('data-base64:@/components/SuperButton/icon/undoHover.svg');
   }
 
   &:active .superButtonIcon {
-    background-image: url('data-base64:~src/components/SuperButton/icon/undoActive.svg');
+    background-image: url('data-base64:@/components/SuperButton/icon/undoActive.svg');
   }
 }
 

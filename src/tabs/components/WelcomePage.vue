@@ -47,7 +47,7 @@ import useAskAi from '@/hooks/useAskAi'
 import useStore from '@/stores/store'
 import useUserStore from '@/stores/user'
 import IconLogoAndText from '@/components/icon/IconLogoAndText.vue'
-import {API_ORIGINS, OPENAI_BASE_URL, SERVER_NAME, WEBPILOT_OPENAI} from '@/config'
+import {API_ORIGINS, OPENAI_BASE_URL, SERVER_NAME} from '@/config'
 
 import StepTwo from './StepTwo.vue'
 import StepThree from './StepThree.vue'
@@ -175,9 +175,7 @@ const saveForm = async () => {
   const generalMode = selectedOption === DEFAULT_SERVICE
   try {
     const {serverName} = authInfo.value
-    if (generalMode) {
-      info.authKey = WEBPILOT_OPENAI.AUTH_KEY
-    } else if (serverName === SERVER_NAME.OPENAI_OFFICIAL) {
+    if (serverName === SERVER_NAME.OPENAI_OFFICIAL) {
       // OpenAI Official
       const {openAIOfficialForm} = authInfo.value
       info.authKey = openAIOfficialForm.apiKey

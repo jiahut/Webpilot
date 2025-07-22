@@ -70,14 +70,12 @@ onMounted(() => {
 .contributors-wrap {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  row-gap: 12px;
-  column-gap: max(8px, 2%);
+  gap: 12px max(8px, 2%);
 }
 
 .contributor-card {
   display: flex;
-  align-self: center;
-  justify-self: center;
+  place-self: center center;
   box-sizing: border-box;
   width: 222px;
   height: 102px;

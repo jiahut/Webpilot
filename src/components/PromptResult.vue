@@ -229,8 +229,7 @@ const openHomePage = () => {
   // height: 116px;
   height: 226px;
   padding: 8px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden auto;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;

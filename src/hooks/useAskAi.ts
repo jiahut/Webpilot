@@ -3,7 +3,7 @@ import {Storage} from '@plasmohq/storage'
 import pangu from 'pangu'
 
 import useStore from '@/stores/store'
-import {WEBPILOT_OPENAI, WEBPILOT_CONFIG_STORAGE_KEY, API_ORIGINS} from '@/config'
+import {WEBPILOT_CONFIG_STORAGE_KEY, API_ORIGINS} from '@/config'
 import {askOpenAI, parseStream} from '@/io'
 
 import {$gettext} from '@/utils/i18n'
@@ -156,26 +156,19 @@ export default function useAskAi() {
       ...toRaw(currentConfig.model),
     }
     if (isAskPage) {
-      // Global popup，use 0125 as default`
-      model.model = 'gpt-4o-mini'
+      // Global popup，use configured default model
+      model.model = currentConfig.model.model || 'gpt-4o'
     }
 
-    let storeAuthKey = currentConfig.authKey
+    const storeAuthKey = currentConfig.authKey
     let storeHostUrl = currentConfig.selfHostUrl
     const currentApiOrigin = apiOrigin || currentConfig.apiOrigin
 
-    if (currentApiOrigin === API_ORIGINS.GENERAL) {
-      storeAuthKey = WEBPILOT_OPENAI.AUTH_KEY
-      storeHostUrl = WEBPILOT_OPENAI.HOST_URL
-    } else if (currentApiOrigin === API_ORIGINS.AZURE) {
+    if (currentApiOrigin === API_ORIGINS.AZURE) {
       const {selfHostUrl, azureApiVersion, azureDeploymentID} = currentConfig
 
       // https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#completions
       storeHostUrl = `https://${selfHostUrl}.openai.azure.com/openai/deployments/${azureDeploymentID}/chat/completions?api-version=${azureApiVersion}`
-    } else {
-      if (storeHostUrl === WEBPILOT_OPENAI.HOST_URL) {
-        storeHostUrl = ''
-      }
     }
 
     return askOpenAI({
@@ -206,28 +199,19 @@ export default function useAskAi() {
         if (err.response && err.response.status === 401) {
           errorMessage.value = err.response?.data?.error?.message
 
-          if (currentApiOrigin !== 'general') {
-            store.setConfig({
-              ...currentConfig,
-              authKey: '',
-              selfHostUrl: '',
-              isAuth: false,
-            })
-          } else {
-            store.setConfig({
-              ...currentConfig,
-              authKey: '',
-              selfHostUrl: '',
-              isAuth: false,
-              azureApiVersion: '',
-              azureDeploymentID: '',
-            })
-          }
+          store.setConfig({
+            ...currentConfig,
+            authKey: '',
+            selfHostUrl: '',
+            isAuth: false,
+            azureApiVersion: '',
+            azureDeploymentID: '',
+          })
 
           throw err
         } else if (err.response && err.response.status === 402) {
           errorMessage.value = $gettext(
-            'Free usage for this week has been exhausted (50 times/week). You can input your OpenAI API Key in the settings page for unlimited use, or wait for the quota refresh at 0:00 UTC+0 on Monday.'
+            'API quota exceeded. Please check your API key or billing status.'
           )
 
           throw err

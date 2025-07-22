@@ -41,6 +41,44 @@
       <WebpilotInput v-model="azureProxyForm.deploymentID" placeholder="DEPLOYMENT_ID" />
     </template>
 
+    <!-- Model Configuration -->
+    <div :class="$style['model-config-section']">
+      <h3 :class="$style['model-title']">Model Configuration</h3>
+      <div :class="$style['model-row']">
+        <label :class="$style['model-label']">Model:</label>
+        <select v-model="modelConfig.model" :class="$style['model-select']">
+          <option value="gpt-4o">GPT-4o</option>
+          <option value="gpt-4o-mini">GPT-4o-mini</option>
+          <option value="gpt-4-turbo">GPT-4 Turbo</option>
+          <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+        </select>
+      </div>
+      <div :class="$style['model-row']">
+        <label :class="$style['model-label']">Temperature:</label>
+        <input
+          v-model.number="modelConfig.temperature"
+          :class="$style['model-slider']"
+          max="2"
+          min="0"
+          step="0.1"
+          type="range"
+        />
+        <span :class="$style['model-value']">{{ modelConfig.temperature }}</span>
+      </div>
+      <div :class="$style['model-row']">
+        <label :class="$style['model-label']">Top P:</label>
+        <input
+          v-model.number="modelConfig.top_p"
+          :class="$style['model-slider']"
+          max="1"
+          min="0"
+          step="0.1"
+          type="range"
+        />
+        <span :class="$style['model-value']">{{ modelConfig.top_p }}</span>
+      </div>
+    </div>
+
     <div :class="$style['btn-wrap']">
       <WebpilotButton
         :class="$style['save-btn']"
@@ -97,10 +135,23 @@ const azureProxyForm = reactive({
   deploymentID: '',
 })
 
+const modelConfig = reactive({
+  model: 'gpt-4o',
+  temperature: 1,
+  top_p: 0.9,
+  frequency_penalty: 0,
+  presence_penalty: 0,
+})
+
 const serverName = ref(SERVER_NAME.OPENAI_OFFICIAL)
 
 onMounted(() => {
-  const {apiOrigin} = store.config
+  const {apiOrigin, model} = store.config
+
+  // Load model configuration
+  if (model) {
+    Object.assign(modelConfig, model)
+  }
 
   if (apiOrigin === API_ORIGINS.OPENAI) {
     const {authKey} = store.config
@@ -193,6 +244,7 @@ const save = async () => {
         isFinishSetup: true,
         authKey,
         selfHostUrl: apiHost,
+        model: {...modelConfig},
       })
     } else {
       store.setConfig({
@@ -204,6 +256,7 @@ const save = async () => {
         selfHostUrl: azureProxyForm.apiHost,
         azureApiVersion: azureProxyForm.apiVersion,
         azureDeploymentID: azureProxyForm.deploymentID,
+        model: {...modelConfig},
       })
     }
   } catch (error) {}
@@ -233,5 +286,58 @@ watch(serverName, (newValue, oldValue) => {
 
 .save-btn {
   width: 143px;
+}
+
+.model-config-section {
+  border-top: 1px solid var(--color-border);
+  padding-top: 24px;
+  margin-top: 24px;
+}
+
+.model-title {
+  margin: 0 0 16px 0;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-baseline-text);
+}
+
+.model-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.model-label {
+  min-width: 100px;
+  font-weight: 500;
+  color: var(--color-baseline-text);
+}
+
+.model-select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-background);
+  color: var(--color-baseline-text);
+  min-width: 150px;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+}
+
+.model-slider {
+  flex: 1;
+  max-width: 200px;
+}
+
+.model-value {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 500;
+  color: var(--color-baseline-text);
 }
 </style>

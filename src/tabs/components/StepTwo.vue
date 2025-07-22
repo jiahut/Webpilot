@@ -1,54 +1,11 @@
 <template>
   <section :class="stepTwo.wrap">
     <WelcomeTitle @on-prev="goBack">{{ $gettext('Set up API') }}</WelcomeTitle>
-    <ol :class="stepTwo.selector">
-      <li
-        :class="[
-          stepTwo['selector__radio'],
-          {[stepTwo['selector__radio--active']]: selectedOption === DEFAULT_SERVICE},
-        ]"
-      >
-        <input
-          id="option1"
-          v-model="selectedOption"
-          :class="stepTwo['radio-body']"
-          name="option"
-          type="radio"
-          :value="DEFAULT_SERVICE"
-          @change="handleOptionChange"
-        />
-        <label for="option1">{{ $gettext('Webpilot Credit') }}</label>
-      </li>
-      <li
-        :class="[
-          stepTwo['selector__radio'],
-          {[stepTwo['selector__radio--active']]: selectedOption === CUSTOM_SERVICE},
-        ]"
-      >
-        <input
-          id="option2"
-          v-model="selectedOption"
-          :class="stepTwo['radio-body']"
-          name="option"
-          type="radio"
-          :value="CUSTOM_SERVICE"
-          @change="handleOptionChange"
-        />
-        <label for="option2">{{ $gettext('OpenAI Credits') }}</label>
-      </li>
-    </ol>
+    <div :class="stepTwo['single-option']">
+      <h3>{{ $gettext('OpenAI API Configuration') }}</h3>
+    </div>
     <article>
-      <section v-if="selectedOption === DEFAULT_SERVICE" :class="stepTwo.introduction">
-        <article :class="stepTwo['introduction-detail']">
-          <span
-            >{{ $gettext('Enjoy Webpilot AI for') }} <b>{{ $gettext('FREE') }}</b></span
-          >
-          <span>{{ $gettext('up to 50 times/week') }}</span>
-          <p>{{ $gettext('Setup your own API key, to enjoy more') }}</p>
-        </article>
-        <ImageFreePlan />
-      </section>
-      <section v-if="selectedOption === CUSTOM_SERVICE" :class="stepTwo.configuration">
+      <section :class="stepTwo.configuration">
         <ServerTypeSelector v-model="serverName" :class="stepTwo['dropdown-menu']" />
 
         <template v-if="serverName === SERVER_NAME.OPENAI_OFFICIAL">
@@ -122,7 +79,6 @@ import {ref, watch} from 'vue'
 // import useStore from '@/stores/store'
 import {SERVER_NAME} from '@/config'
 import {$gettext} from '@/utils/i18n'
-import ImageFreePlan from '@/components/image/ImageFreePlan.vue'
 import SettingAlert from '@/options/components/SettingAlert.vue'
 import ServerTypeSelector from '@/options/components/ServerTypeSelector.vue'
 import WebpilotInput from '@/options/components/WebpilotInput.vue'
@@ -131,7 +87,6 @@ import WebpilotAlert from '@/components/WebpilotAlert.vue'
 
 import WelcomeTitle from './WelcomeTitle.vue'
 
-const DEFAULT_SERVICE = 'general'
 const CUSTOM_SERVICE = 'personal'
 const props = defineProps({
   modelValue: {
@@ -168,20 +123,13 @@ const emits = defineEmits(['update:modelValue', 'onPrev', 'onNext', 'onRefresh']
 const goBack = () => emits('onPrev')
 const onNext = () => emits('onNext')
 
-const selectedOption = ref(
-  props.modelValue.selectedOption === DEFAULT_SERVICE ? DEFAULT_SERVICE : CUSTOM_SERVICE
-)
+const selectedOption = ref(CUSTOM_SERVICE)
 const serverName = ref(props.modelValue.serverName || SERVER_NAME.OPENAI_OFFICIAL)
 const openAIOfficialForm = ref(props.modelValue.openAIOfficialForm || {apiKey: ''})
 const openAiProxyForm = ref(props.modelValue.openAiProxyForm || {apiKey: '', apiHost: ''})
 const azureProxyForm = ref(
   props.modelValue.azureProxyForm || {apiKey: '', apiHost: '', apiVersion: '', deploymentID: ''}
 )
-
-const handleOptionChange = event => {
-  const {value} = event.target
-  selectedOption.value = value
-}
 
 watch(selectedOption, (newValue, oldValue) => {
   if (newValue !== oldValue) emits('onRefresh')
@@ -349,5 +297,17 @@ watch(
 
 .warn-txt {
   margin-top: 20px;
+}
+
+.single-option {
+  margin: 36px 0 24px;
+  text-align: center;
+
+  h3 {
+    margin: 0;
+    color: #292929;
+    font-weight: 600;
+    font-size: 18px;
+  }
 }
 </style>

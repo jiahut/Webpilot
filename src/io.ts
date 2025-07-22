@@ -1,9 +1,6 @@
-import {Storage} from '@plasmohq/storage'
-
 import {getEncoding} from 'js-tiktoken'
 
-import {OPENAI_BASE_URL, API_PATH, WEBPILOT_OPENAI, API_ORIGINS} from '@/config'
-import {GOOGLE_CREDENTIAL} from '@/apiConfig'
+import {OPENAI_BASE_URL, API_PATH, API_ORIGINS} from '@/config'
 
 // function getTokensNum(messages) {
 //   const encoding = getEncoding('cl100k_base')
@@ -66,8 +63,11 @@ export async function askOpenAI({authKey, model, message, baseURL = null, apiOri
 
   // Reassemble model and process long content request
   const requestModel = {...model}
+  // Use content cutting for mini models to handle token limits
   requestModel.messages =
-    requestModel.model === 'gpt-4o-mini' ? getNewCutMessages(message) : message
+    requestModel.model === 'gpt-4o-mini' || requestModel.model === 'gpt-3.5-turbo'
+      ? getNewCutMessages(message)
+      : message
   requestModel.stream = true
 
   // Assemble url
@@ -78,10 +78,7 @@ export async function askOpenAI({authKey, model, message, baseURL = null, apiOri
   }
   const url = apiOrigin === API_ORIGINS.AZURE ? prefixURL : `${prefixURL}${API_PATH}`
 
-  const storage = new Storage()
-  const webpilotKey = await storage.get(GOOGLE_CREDENTIAL)
-
-  const key = authKey === WEBPILOT_OPENAI.AUTH_KEY ? webpilotKey : authKey
+  const key = authKey
 
   // const error = new Error()
   // error.response = {status: 402}
