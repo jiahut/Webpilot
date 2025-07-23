@@ -46,12 +46,12 @@
       <h3 :class="$style['model-title']">Model Configuration</h3>
       <div :class="$style['model-row']">
         <label :class="$style['model-label']">Model:</label>
-        <select v-model="modelConfig.model" :class="$style['model-select']">
-          <option value="gpt-4o">GPT-4o</option>
-          <option value="gpt-4o-mini">GPT-4o-mini</option>
-          <option value="gpt-4-turbo">GPT-4 Turbo</option>
-          <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-        </select>
+        <input 
+          v-model="modelConfig.model" 
+          :class="$style['model-input']"
+          type="text"
+          placeholder="Enter model name (e.g., gpt-4o)"
+        />
       </div>
       <div :class="$style['model-row']">
         <label :class="$style['model-label']">Temperature:</label>
@@ -314,14 +314,13 @@ watch(serverName, (newValue, oldValue) => {
   color: var(--color-baseline-text);
 }
 
-.model-select {
+.model-input {
   padding: 8px 12px;
   border: 1px solid var(--color-border);
   border-radius: 6px;
   background: var(--color-background);
   color: var(--color-baseline-text);
   min-width: 150px;
-  cursor: pointer;
 
   &:focus {
     outline: none;
